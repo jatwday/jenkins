@@ -1,5 +1,7 @@
 pipeline {
     agent { docker { image 'python:3.5.1' } }
+ 
+ 
     stages {
         stage('Build') {
             steps {
@@ -17,7 +19,9 @@ pipeline {
         }
         stage('Deploy') {
             steps {
-                echo 'Deploying....'
+                retry(3) {
+                    sh './flakey-deploy.sh'
+                }
             }
         }
     }
